@@ -41,10 +41,10 @@ docker push gcr.io/YOUR_PROJECT_ID/noir-apparel
 
 3. Deploy to Cloud Run:
 \`\`\`bash
-gcloud run deploy noir-apparel \
+gcloud run deploy sitamericano \
   --image gcr.io/YOUR_PROJECT_ID/noir-apparel \
   --platform managed \
-  --region us-central1 \
+  --region europe-west1 \
   --allow-unauthenticated \
   --port 8080
 \`\`\`
@@ -61,10 +61,10 @@ This will automatically build, push, and deploy your application.
 ### Option 3: Deploy from Source (Easiest)
 
 \`\`\`bash
-gcloud run deploy noir-apparel \
+gcloud run deploy sitamericano \
   --source . \
   --platform managed \
-  --region us-central1 \
+  --region europe-west1 \
   --allow-unauthenticated \
   --port 8080
 \`\`\`
@@ -74,8 +74,9 @@ gcloud run deploy noir-apparel \
 To add environment variables:
 
 \`\`\`bash
-gcloud run deploy noir-apparel \
-  --set-env-vars "KEY1=value1,KEY2=value2"
+gcloud run deploy sitamericano \
+  --set-env-vars "KEY1=value1,KEY2=value2" \
+  --region europe-west1
 \`\`\`
 
 ## Custom Domain
@@ -84,17 +85,35 @@ To map a custom domain:
 
 \`\`\`bash
 gcloud run domain-mappings create \
-  --service noir-apparel \
+  --service sitamericano \
   --domain your-domain.com \
-  --region us-central1
+  --region europe-west1
 \`\`\`
 
 ## Monitoring
 
 View logs:
 \`\`\`bash
-gcloud run services logs read noir-apparel --region us-central1
+gcloud run services logs read sitamericano --region europe-west1
 \`\`\`
+
+View service details:
+\`\`\`bash
+gcloud run services describe sitamericano --region europe-west1
+\`\`\`
+
+## Troubleshooting
+
+### If the site shows "placeholder" page:
+1. Check build logs: `gcloud builds list --limit=5`
+2. View specific build: `gcloud builds log BUILD_ID`
+3. Ensure the build completed successfully
+4. Verify the service is running: `gcloud run services list --region europe-west1`
+
+### If build fails:
+1. Check that all dependencies are in package.json
+2. Verify Dockerfile syntax
+3. Test build locally: `docker build -t test .`
 
 ## Costs
 
